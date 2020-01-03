@@ -4,16 +4,23 @@ using UnityEngine;
 using UniRx;
 using System.Diagnostics;
 using Debug = UnityEngine.Debug;
+using System.Linq;
+using Unity.Collections;
+using UnityEngine.Networking;
+using System.IO;
+using System;
 
 public class ComparisonManager : MonoBehaviour
 {
 	[SerializeField] private MeshFilter m_Obj;
 	[SerializeField] private MeshFilter m_Drc;
 
+	private NativeArray<byte> _Data;
 	private void Start()
 	{
 		Stopwatch watch = new Stopwatch();
 		var dracoLoader = new DracoMeshLoader();
+		dracoLoader.onMeshesLoaded += OnMeshesLoaded;
 		var mesh = new List<Mesh>();
 
 		watch.Start();
@@ -24,9 +31,27 @@ public class ComparisonManager : MonoBehaviour
 		watch.Reset();
 
 		watch.Start();
-		dracoLoader.LoadMeshFromAsset("Models/gun/MachineGun.drc", ref mesh);
-		m_Drc.mesh = mesh[0];
-		watch.Stop();
-		Debug.LogWarning($"FINISH TIME DRC { watch.Elapsed.TotalSeconds }");
+		var url = Path.Combine(Application.dataPath, "Resources", "Models", "gun", "MachineGun.drc.bytes");
+		_Data = new NativeArray<byte>();
+		ObservableWWW.GetAndGetBytes(url).Subscribe(_byte =>
+		{
+			Debug.LogWarning($"URL : {url} , BYTES : {_byte.Length}");
+			_Data = new NativeArray<byte>(_byte, Allocator.Persistent);
+			StartCoroutine(dracoLoader.DecodeMesh(_Data));
+		}, _error =>
+		{
+			Debug.LogError(_error);
+		}, () =>
+		{
+			watch.Stop();
+			Debug.LogWarning($"FINISH TIME DRC { watch.Elapsed.TotalSeconds }");
+		}).AddTo(this);
 	}
+
+	private void OnMeshesLoaded(Mesh _mesh)
+	{
+		m_Drc.mesh = _mesh;
+	}
+
+	private void OnDestroy() => _Data.Dispose();
 }

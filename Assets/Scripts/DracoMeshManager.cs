@@ -38,7 +38,7 @@ public class DracoMeshManager : MonoBehaviour
 			var meshList = new List<Mesh>();
 			foreach (var asset in modelDict[key])
 			{
-				dracoLoader.LoadMeshFromAsset(Path.Combine(_MODEL_FOLDER, key, asset), ref meshList);
+				// dracoLoader.LoadMeshFromAsset(Path.Combine(_MODEL_FOLDER, key, asset), ref meshList);
 			}
 			_MeshDict.Add(key, meshList);
 		}
