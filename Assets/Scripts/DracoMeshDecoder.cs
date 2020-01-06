@@ -21,7 +21,11 @@ public class DracoMeshDecoder : MonoBehaviour
 			{
 				var endFrame = DracoMeshManager.Instance.ListCount(m_ModelName);
 				if (count < endFrame)
+#if !USE_RUNTIME_LOADER
 					_MeshFilter.mesh = DracoMeshManager.Instance.GetMesh(m_ModelName, count++);
+#else
+					DracoMeshManager.Instance.GetMesh(m_ModelName, count++).Subscribe(_mesh => _MeshFilter.mesh = _mesh).AddTo(this);
+#endif
 				else if (endFrame == count && m_Loop)
 					count = 0;
 			}).AddTo(this);
