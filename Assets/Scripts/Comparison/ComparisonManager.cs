@@ -31,7 +31,12 @@ public class ComparisonManager : MonoBehaviour
 		watch.Reset();
 
 		watch.Start();
-		var url = Path.Combine(Application.dataPath, "Resources", "Models", "gun", "MachineGun.drc.bytes");
+#if UNITY_IOS
+		var url = "file://" + Path.Combine(Application.streamingAssetsPath, "Models", "gun", "MachineGun.drc.bytes");
+#elif UNITY_EDITOR
+		var url = Path.Combine(Application.streamingAssetsPath, "Models", "gun", "MachineGun.drc.bytes");
+#endif
+		Debug.Log($"DOWNLOAD PATH : {url}");
 		_Data = new NativeArray<byte>();
 		ObservableWWW.GetAndGetBytes(url).Subscribe(_byte =>
 		{

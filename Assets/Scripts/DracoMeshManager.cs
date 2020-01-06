@@ -8,7 +8,6 @@ using UnityEngine;
 
 public class DracoMeshManager : MonoBehaviour
 {
-	private const string _RESOURCES_FOLDER = "Resources";
 	private const string _MODEL_FOLDER = "Models";
 
 	public static DracoMeshManager Instance => _Instance;
@@ -28,7 +27,7 @@ public class DracoMeshManager : MonoBehaviour
 
 	private void InitResources()
 	{
-		var root = new DirectoryInfo(Path.Combine(Application.dataPath, _RESOURCES_FOLDER, _MODEL_FOLDER));
+		var root = new DirectoryInfo(Path.Combine(Application.streamingAssetsPath, _MODEL_FOLDER));
 		var modelDict = new Dictionary<string, List<string>>();
 
 		foreach (var dir in root.GetDirectories())
@@ -44,7 +43,11 @@ public class DracoMeshManager : MonoBehaviour
 			var meshList = new List<Mesh>();
 			foreach (var asset in modelDict[key])
 			{
-				var url = Path.Combine(Application.dataPath, _RESOURCES_FOLDER, _MODEL_FOLDER, key, asset);
+#if UNITY_IOS
+				var url = "file://" + Path.Combine(Application.streamingAssetsPath, _MODEL_FOLDER, key, asset);
+#elif UNITY_EDITOR
+				var url = Path.Combine(Application.streamingAssetsPath, _MODEL_FOLDER, key, asset);
+#endif
 				ObservableWWW.GetAndGetBytes(url)
 				.Subscribe
 				(
