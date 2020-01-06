@@ -5,6 +5,7 @@ using System.Linq;
 using UniRx;
 using Unity.Collections;
 using UnityEngine;
+using UnityEngine.Profiling;
 
 public class DracoMeshManager : MonoBehaviour
 {
@@ -35,6 +36,7 @@ public class DracoMeshManager : MonoBehaviour
 		var root = new DirectoryInfo(Path.Combine(Application.streamingAssetsPath, _MODEL_FOLDER));
 
 #if !USE_RUNTIME_LOADER
+		Profiler.BeginSample("LOAD_MODELS");
 		var modelDict = new Dictionary<string, List<string>>();
 		var dracoLoader = new DracoMeshLoader();
 		int count = 0;
@@ -78,6 +80,7 @@ public class DracoMeshManager : MonoBehaviour
 			}
 			_MeshDict.Add(key, meshList);
 		}
+		Profiler.EndSample();
 #else
 		_DracoLoader = new DracoMeshLoader();
 		_ModelDict = new Dictionary<string, List<string>>();
@@ -90,7 +93,7 @@ public class DracoMeshManager : MonoBehaviour
 #endif
 	}
 
-#if !USE_RUNTIME_LOADERER
+#if !USE_RUNTIME_LOADER
 	public int ListCount(string _modelName) => _MeshDict[_modelName].Count;
 
 	public Mesh GetMesh(string _modelName, int _index) => _MeshDict[_modelName][_index];
