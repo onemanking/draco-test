@@ -36,14 +36,13 @@ public class DracoMeshManager : MonoBehaviour
 		var root = new DirectoryInfo(Path.Combine(Application.streamingAssetsPath, _MODEL_FOLDER));
 
 #if !USE_RUNTIME_LOADER
-		Profiler.BeginSample("LOAD_MODELS");
 		var modelDict = new Dictionary<string, List<string>>();
 		var dracoLoader = new DracoMeshLoader();
 		int count = 0;
 
 		foreach (var dir in root.GetDirectories())
 		{
-			var files = dir.GetFiles("*.drc.bytes");
+			var files = dir.GetFiles("*.drc.bytes", SearchOption.AllDirectories);
 			modelDict.Add(dir.Name, files.Select(_ => _.Name).OrderBy(x => x).ToList());
 		}
 
@@ -80,13 +79,12 @@ public class DracoMeshManager : MonoBehaviour
 			}
 			_MeshDict.Add(key, meshList);
 		}
-		Profiler.EndSample();
 #else
 		_DracoLoader = new DracoMeshLoader();
 		_ModelDict = new Dictionary<string, List<string>>();
 		foreach (var dir in root.GetDirectories())
 		{
-			var files = dir.GetFiles("*.drc.bytes");
+			var files = dir.GetFiles("*.drc.bytes", SearchOption.AllDirectories);
 			_ModelDict.Add(dir.Name, files.Select(_ => _.Name).OrderBy(x => x).ToList());
 		}
 		_IsInitialized = true;
