@@ -55,7 +55,6 @@ public class DracoLoader : MonoBehaviour
 												{
 													meshs[index] = _mesh;
 													playBack = m_PlayAnimationAsPossible ? true : index >= allFiles.Count - 1;
-													data.Dispose();
 												}
 											).AddTo(this);
 								},
