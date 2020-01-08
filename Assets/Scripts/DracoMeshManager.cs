@@ -24,43 +24,50 @@ public class DracoMeshManager : MonoBehaviour
 	{
 		return Observable.Create<Mesh[]>(_observer =>
 		{
-			var allFiles = Directory.GetFiles(Path.Combine(Application.streamingAssetsPath, _MODEL_FOLDER, _modelName), "*.drc.bytes", SearchOption.AllDirectories).OrderBy(x => x).ToArray();
-			var meshs = new Mesh[allFiles.Length];
 			var disposable = new CompositeDisposable();
-
-			for (int i = 0; i < allFiles.Length; i++)
+			try
 			{
-				string file = allFiles[i];
-				var index = i;
-				var path = "file://" + file;
-				disposable.Add
-				(
-					ObservableWWW.GetAndGetBytes(path)
-						.Subscribe
-						(
-							_byte =>
-							{
-								var data = new NativeArray<byte>(_byte, Allocator.Persistent);
-								Observable.FromCoroutine<Mesh>((_) => _DracoLoader.DecodeMesh(data, _))
-										.Subscribe
-										(
-											_mesh =>
-											{
-												meshs[index] = _mesh;
-												_observer.OnNext(meshs);
-												if (index >= allFiles.Length - 1)
+				var allFiles = Directory.GetFiles(Path.Combine(Application.streamingAssetsPath, _MODEL_FOLDER, _modelName), "*.drc.bytes", SearchOption.AllDirectories).OrderBy(x => x).ToArray();
+				var meshs = new Mesh[allFiles.Length];
+
+				for (int i = 0; i < allFiles.Length; i++)
+				{
+					string file = allFiles[i];
+					var index = i;
+					var path = "file://" + file;
+					disposable.Add
+					(
+						ObservableWWW.GetAndGetBytes(path)
+							.Subscribe
+							(
+								_byte =>
+								{
+									var data = new NativeArray<byte>(_byte, Allocator.Persistent);
+									Observable.FromCoroutine<Mesh>((_) => _DracoLoader.DecodeMesh(data, _))
+											.Subscribe
+											(
+												_mesh =>
 												{
-													_observer.OnCompleted();
+													meshs[index] = _mesh;
+													_observer.OnNext(meshs);
+													if (index >= allFiles.Length - 1)
+													{
+														_observer.OnCompleted();
+													}
 												}
-											}
-										);
-							},
-							_error =>
-							{
-								_observer.OnError(_error);
-							}
-						)
-				);
+											);
+								},
+								_error =>
+								{
+									_observer.OnError(_error);
+								}
+							)
+					);
+				}
+			}
+			catch (Exception error)
+			{
+				_observer.OnError(error);
 			}
 
 			return Disposable.Create(() => disposable?.Dispose());
