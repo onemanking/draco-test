@@ -5,22 +5,25 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Panda/0.panda.preload.unity
     guid: ac6fc532ebb32a74d8c826fafeb9073e
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Panda/1.panda.unity
     guid: 682d9ffb30adb4148984961b55feb888
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Panda/2.panda.unity
     guid: 4a75fb90a33fe1346a4af029c2bb0854
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Panda/3.panda.unity
     guid: 723b0db60639a8c4f8e6d83cba2bb760
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Panda/4.panda.unity
     guid: 235e1e6072db75842b551028de49e86c
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Panda/5.panda.unity
     guid: 6fc78d2995f0b654d805f75e0a4f53b3
+  - enabled: 1
+    path: Assets/Scenes/Liquid.Sample.Scene.unity
+    guid: 6041fef6db256ca4fb8a7f9f6a8a33ab
   m_configObjects: {}
