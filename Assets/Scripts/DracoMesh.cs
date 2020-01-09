@@ -33,7 +33,8 @@ public class DracoMesh : MonoBehaviour
 					{
 						meshs = _meshs;
 						_CanPlay = true;
-						DracoMeshController.Instance.SetEndFrame(meshs.Length);
+						if (!DracoMeshController.Instance.Inited)
+							DracoMeshController.Instance.InitEndFrame(meshs.Length);
 					}
 					, _error =>
 					{

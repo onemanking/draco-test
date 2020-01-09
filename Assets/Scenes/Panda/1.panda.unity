@@ -404,11 +404,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 3873985572022220597, guid: bdfe9cb58d6491f4899c995ff4733163,
-        type: 3}
-      propertyPath: m_PlayAnimationAsPossible
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 4079048157612213387, guid: bdfe9cb58d6491f4899c995ff4733163,
         type: 3}
       propertyPath: m_Name

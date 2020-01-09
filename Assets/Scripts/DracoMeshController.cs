@@ -18,10 +18,12 @@ public class DracoMeshController : MonoBehaviour
 
 	public int CurrentFrame => _CurrentFrame;
 	public bool PlayBack => _PlayBack;
+	public bool Inited => _Inited;
 
 	private bool _PlayBack;
 	private float _Time;
 	private int _CurrentFrame;
+	private bool _Inited;
 	private int _EndFrame;
 
 	private void Awake() => _Instance = GetComponent<DracoMeshController>();
@@ -30,7 +32,6 @@ public class DracoMeshController : MonoBehaviour
 	{
 		//PlayBack
 		var everyObserver = Observable.EveryUpdate();
-		var isEnd = false;
 		var allMesh = FindObjectsOfType<DracoMesh>();
 
 		everyObserver.Where(x => m_PlayAnimationAsPossible && allMesh.Any(mesh => mesh.CanPlay) && !_PlayBack).Subscribe(_ =>
@@ -52,9 +53,7 @@ public class DracoMeshController : MonoBehaviour
 		{
 			_Time += Time.deltaTime;
 			_CurrentFrame = Mathf.FloorToInt(_Time * m_FrameRate);
-			isEnd = _CurrentFrame >= _EndFrame;
-
-			if (isEnd)
+			if (_CurrentFrame >= _EndFrame)
 			{
 				_Time = 0;
 				_CurrentFrame = 0;
@@ -100,7 +99,11 @@ public class DracoMeshController : MonoBehaviour
 		_PlayBack = !_PlayBack;
 	}
 
-	public void SetEndFrame(int _endFrame) => _EndFrame = _endFrame;
+	public void InitEndFrame(int _endFrame)
+	{
+		_Inited = true;
+		_EndFrame = _endFrame;
+	}
 
 	#endregion
 

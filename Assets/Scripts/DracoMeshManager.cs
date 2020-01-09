@@ -59,10 +59,6 @@ public class DracoMeshManager : MonoBehaviour
 												{
 													throw _error;
 												}
-												, () =>
-												{
-													data.Dispose();
-												}
 											);
 								},
 								_error =>
