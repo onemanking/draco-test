@@ -30,18 +30,21 @@ public class DracoMeshController : MonoBehaviour
 
 	private void Start()
 	{
-		//PlayBack
 		var everyObserver = Observable.EveryUpdate();
 		var allMesh = FindObjectsOfType<DracoMesh>();
 
-		everyObserver.Where(x => m_PlayAnimationAsPossible && allMesh.Any(mesh => mesh.CanPlay) && !_PlayBack).Subscribe(_ =>
+		IDisposable checkAnyCanPlay = null;
+		checkAnyCanPlay = everyObserver.Where(x => m_PlayAnimationAsPossible && allMesh.Any(mesh => mesh.CanPlay) && _Inited).Subscribe(_ =>
 		{
 			_PlayBack = m_PlayAnimationOnStart;
+			checkAnyCanPlay?.Dispose();
 		}).AddTo(this);
 
-		everyObserver.Where(x => !m_PlayAnimationAsPossible && allMesh.All(mesh => mesh.IsLoaded) && !_PlayBack).Subscribe(_ =>
+		IDisposable checkAllLoaded = null;
+		checkAllLoaded = everyObserver.Where(x => !m_PlayAnimationAsPossible && allMesh.All(mesh => mesh.IsLoaded) && _Inited).Subscribe(_ =>
 		{
 			_PlayBack = m_PlayAnimationOnStart;
+			checkAllLoaded?.Dispose();
 		}).AddTo(this);
 
 		m_Loop.Subscribe(_ =>
