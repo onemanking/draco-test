@@ -98,7 +98,7 @@ LightmapSettings:
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
   m_LightingDataAsset: {fileID: 0}
-  m_UseShadowmask: 1
+  m_UseShadowmask: 0
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -190,7 +190,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9e501ff20017853498cf1ed855396fc5, type: 3}
---- !u!1001 &795135390260635086
+--- !u!1001 &2037316171
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -255,7 +255,7 @@ PrefabInstance:
     - target: {fileID: 795135390856039279, guid: cd0736b0e9020cc4fb641963d655cc78,
         type: 3}
       propertyPath: m_Name
-      value: DracoManager
+      value: DracoMeshManager
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: cd0736b0e9020cc4fb641963d655cc78, type: 3}

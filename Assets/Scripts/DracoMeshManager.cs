@@ -55,6 +55,14 @@ public class DracoMeshManager : MonoBehaviour
 														_observer.OnCompleted();
 													}
 												}
+												, _error =>
+												{
+													throw _error;
+												}
+												, () =>
+												{
+													data.Dispose();
+												}
 											);
 								},
 								_error =>

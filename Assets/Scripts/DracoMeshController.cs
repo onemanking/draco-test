@@ -1,10 +1,14 @@
 ﻿using UnityEngine;
 using UniRx;
 using System;
+using System.Linq;
 
 public class DracoMeshController : MonoBehaviour
 {
-	[SerializeField] private StringReactiveProperty m_ModelName;
+	public static DracoMeshController Instance => _Instance;
+
+	private static DracoMeshController _Instance;
+
 	[Range(1, 200)]
 	[SerializeField] private int m_FrameRate = 30;
 	[SerializeField] private BoolReactiveProperty m_Loop;
@@ -12,58 +16,43 @@ public class DracoMeshController : MonoBehaviour
 	[SerializeField] private bool m_PlayAnimationAsPossible = true;
 	[SerializeField] private bool m_LoadNextSceneOnEnd = true;
 
-	public bool IsLoaded => _IsLoaded;
+	public int CurrentFrame => _CurrentFrame;
+	public bool PlayBack => _PlayBack;
 
-	private bool _IsLoaded;
 	private bool _PlayBack;
 	private float _Time;
 	private int _CurrentFrame;
+	private int _EndFrame;
+
+	private void Awake() => _Instance = GetComponent<DracoMeshController>();
 
 	private void Start()
 	{
-		var meshFilter = GetComponent<MeshFilter>();
-		Mesh[] meshs = null;
-		IDisposable disposable = null;
-
-		m_ModelName.Subscribe(_modelName =>
-		{
-			ResetPlayback(false);
-			disposable?.Dispose();
-			disposable = DracoMeshManager.Instance.GetMeshListAsObservable(_modelName)
-				.Subscribe
-				(
-					_meshs =>
-					{
-						meshs = _meshs;
-						_PlayBack = m_PlayAnimationAsPossible && m_PlayAnimationOnStart;
-					}
-					, _error =>
-					{
-						Debug.LogError(_error.Message);
-					}
-					, () =>
-					{
-						_PlayBack = m_PlayAnimationOnStart;
-						_IsLoaded = true;
-					}
-				).AddTo(this);
-		}).AddTo(this);
-
 		//PlayBack
 		var everyObserver = Observable.EveryUpdate();
 		var isEnd = false;
+		var allMesh = FindObjectsOfType<DracoMesh>();
+
+		everyObserver.Where(x => m_PlayAnimationAsPossible && allMesh.Any(mesh => mesh.CanPlay) && !_PlayBack).Subscribe(_ =>
+		{
+			_PlayBack = m_PlayAnimationOnStart;
+		}).AddTo(this);
+
+		everyObserver.Where(x => !m_PlayAnimationAsPossible && allMesh.All(mesh => mesh.IsLoaded) && !_PlayBack).Subscribe(_ =>
+		{
+			_PlayBack = m_PlayAnimationOnStart;
+		}).AddTo(this);
+
 		m_Loop.Subscribe(_ =>
 		{
 			if (!_PlayBack) _PlayBack = m_Loop.Value;
 		}).AddTo(this);
 
-		everyObserver.Where(x => _PlayBack && meshs != null).Subscribe(_ =>
+		everyObserver.Where(x => _PlayBack).Subscribe(_ =>
 		{
-			meshFilter.mesh = meshs[_CurrentFrame];
-
 			_Time += Time.deltaTime;
 			_CurrentFrame = Mathf.FloorToInt(_Time * m_FrameRate);
-			isEnd = _CurrentFrame >= meshs.Length;
+			isEnd = _CurrentFrame >= _EndFrame;
 
 			if (isEnd)
 			{
@@ -76,12 +65,12 @@ public class DracoMeshController : MonoBehaviour
 		}).AddTo(this);
 
 		//ResetPlayback
-		everyObserver.Where(x => (Input.GetKeyDown(KeyCode.R) || (Input.touchCount >= 2 && Input.GetTouch(1).phase == TouchPhase.Began)) && meshs != null).Subscribe(_ =>
+		everyObserver.Where(x => (Input.GetKeyDown(KeyCode.R) || (Input.touchCount >= 2 && Input.GetTouch(1).phase == TouchPhase.Began))).Subscribe(_ =>
 		{
 			ResetPlayback();
 		}).AddTo(this);
 
-		everyObserver.Where(x => (Input.GetKeyDown(KeyCode.Space) || (Input.touchCount == 1 && Input.GetTouch(0).phase == TouchPhase.Began)) && meshs != null).Subscribe(_ =>
+		everyObserver.Where(x => (Input.GetKeyDown(KeyCode.Space) || (Input.touchCount == 1 && Input.GetTouch(0).phase == TouchPhase.Began))).Subscribe(_ =>
 		{
 			TogglePlayback();
 		}).AddTo(this);
@@ -110,6 +99,8 @@ public class DracoMeshController : MonoBehaviour
 	{
 		_PlayBack = !_PlayBack;
 	}
+
+	public void SetEndFrame(int _endFrame) => _EndFrame = _endFrame;
 
 	#endregion
 

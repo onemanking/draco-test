@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 1356872306214196550}
   - component: {fileID: 1356872306214196545}
   - component: {fileID: 1356872306214196544}
-  - component: {fileID: 1356872306214196551}
+  - component: {fileID: 2217271090741881534}
   m_Layer: 0
   m_Name: DracoMesh
   m_TagString: Untagged
@@ -80,7 +80,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!114 &1356872306214196551
+--- !u!114 &2217271090741881534
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -89,14 +89,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 1356872306214196547}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 82b0e786b0c8d4c4caf624c507954dbb, type: 3}
+  m_Script: {fileID: 11500000, guid: 8f9680425526339448d5d3bd29c5ca13, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_ModelName:
     value: 1_wrap
-  m_FrameRate: 30
-  m_Loop:
-    value: 0
-  m_PlayAnimationOnStart: 1
-  m_PlayAnimationAsPossible: 1
-  m_LoadNextSceneOnEnd: 1

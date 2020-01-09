@@ -26,4 +26,12 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/Liquid.Sample.Scene.unity
     guid: 6041fef6db256ca4fb8a7f9f6a8a33ab
-  m_configObjects: {}
+  m_configObjects:
+    com.unity.xr.arcore.PlayerSettings: {fileID: 11400000, guid: c12f82544f8747f45a2bddec3bc7ca86,
+      type: 2}
+    com.unity.xr.arkit.PlayerSettings: {fileID: 11400000, guid: e92c87efd8d0150489947053abae349b,
+      type: 2}
+    com.unity.xr.management.arkit_loader: {fileID: 11400000, guid: 38ec845f413395342aafb1a2041c170d,
+      type: 2}
+    com.unity.xr.management.loader_settings: {fileID: 11400000, guid: 4eb52bf2effbb104cb006517721ad434,
+      type: 2}
