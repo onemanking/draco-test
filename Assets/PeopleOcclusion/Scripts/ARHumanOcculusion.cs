@@ -3,6 +3,7 @@ using UnityEngine.Rendering;
 using UnityEngine.Serialization;
 using UnityEngine.XR.ARFoundation;
 using UnityEngine.UI;
+using UniRx;
 
 namespace ARFoundationExtension.PeopleOcclusion
 {
@@ -10,12 +11,12 @@ namespace ARFoundationExtension.PeopleOcclusion
 	[RequireComponent(typeof(Camera))]
 	[RequireComponent(typeof(ARCameraManager))]
 	[RequireComponent(typeof(ARCameraBackground))]
-	public class ARCameraOcculusion : MonoBehaviour
+	public class ARHumanOcculusion : MonoBehaviour
 	{
 		[SerializeField]
-		private ARHumanBodyManager humanBodyManager;
+		private AROcclusionManager m_ArOcclusionManager;
 
-		private Material material;
+		private Material _Material;
 
 		const string DepthTexName = "_textureDepth";
 		const string StencilTexName = "_textureStencil";
@@ -25,16 +26,16 @@ namespace ARFoundationExtension.PeopleOcclusion
 
 		void Start()
 		{
-			material = GetComponent<ARCameraBackground>().material;
-		}
-
-		private void Update()
-		{
-			if (humanBodyManager != null)
-			{
-				// material.SetTexture(DepthTexId, humanBodyManager.humanDepthTexture);
-				// material.SetTexture(StencilTexId, humanBodyManager.humanStencilTexture);
-			}
+			_Material = GetComponent<ARCameraBackground>().material;
+			Observable.EveryUpdate()
+						.Where(x => m_ArOcclusionManager != null
+							&& m_ArOcclusionManager.humanDepthTexture != null
+							&& m_ArOcclusionManager.humanStencilTexture)
+						.Subscribe(_ =>
+						{
+							_Material.SetTexture(DepthTexId, m_ArOcclusionManager.humanDepthTexture);
+							_Material.SetTexture(StencilTexId, m_ArOcclusionManager.humanStencilTexture);
+						}).AddTo(this);
 		}
 	}
 }
