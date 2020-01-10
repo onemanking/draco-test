@@ -2,6 +2,7 @@
 using UniRx;
 using System;
 using System.Linq;
+using System.Collections.Generic;
 
 public class DracoMeshController : MonoBehaviour
 {
@@ -25,23 +26,24 @@ public class DracoMeshController : MonoBehaviour
 	private int _CurrentFrame;
 	private bool _Inited;
 	private int _EndFrame;
+	private List<DracoMesh> _DracoMeshList = new List<DracoMesh>();
 
 	private void Awake() => _Instance = GetComponent<DracoMeshController>();
 
 	private void Start()
 	{
 		var everyObserver = Observable.EveryUpdate();
-		var allMesh = FindObjectsOfType<DracoMesh>();
+		_DracoMeshList = FindObjectsOfType<DracoMesh>().ToList();
 
 		IDisposable checkAnyCanPlay = null;
-		checkAnyCanPlay = everyObserver.Where(x => m_PlayAnimationAsPossible && allMesh.Any(mesh => mesh.CanPlay) && _Inited).Subscribe(_ =>
+		checkAnyCanPlay = everyObserver.Where(x => m_PlayAnimationAsPossible && _DracoMeshList.Count > 0 && _DracoMeshList.Any(mesh => mesh.CanPlay) && _Inited).Subscribe(_ =>
 		{
 			_PlayBack = m_PlayAnimationOnStart;
 			checkAnyCanPlay?.Dispose();
 		}).AddTo(this);
 
 		IDisposable checkAllLoaded = null;
-		checkAllLoaded = everyObserver.Where(x => !m_PlayAnimationAsPossible && allMesh.All(mesh => mesh.IsLoaded) && _Inited).Subscribe(_ =>
+		checkAllLoaded = everyObserver.Where(x => !m_PlayAnimationAsPossible && _DracoMeshList.Count > 0 && _DracoMeshList.All(mesh => mesh.IsLoaded) && _Inited).Subscribe(_ =>
 		{
 			_PlayBack = m_PlayAnimationOnStart;
 			checkAllLoaded?.Dispose();
@@ -77,6 +79,13 @@ public class DracoMeshController : MonoBehaviour
 			TogglePlayback();
 		}).AddTo(this);
 	}
+
+	public void AddDracoMeshToList(DracoMesh _dracoMesh)
+	{
+		if (!_DracoMeshList.Contains(_dracoMesh)) _DracoMeshList.Add(_dracoMesh);
+	}
+
+	public bool RemoveDracoMeshToList(DracoMesh _dracoMesh) => _DracoMeshList.Remove(_dracoMesh);
 
 	#region ANIMATION PLAYBACK
 

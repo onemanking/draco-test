@@ -21,6 +21,7 @@ public class DracoMesh : MonoBehaviour
 	{
 		var meshFilter = GetComponent<MeshFilter>();
 		Mesh[] meshs = null;
+		DracoMeshController.Instance.AddDracoMeshToList(this);
 
 		IDisposable disposable = null;
 		m_ModelName.Subscribe(_modelName =>
@@ -50,4 +51,6 @@ public class DracoMesh : MonoBehaviour
 		Observable.EveryUpdate().Where(x => DracoMeshController.Instance.PlayBack && meshs != null && DracoMeshController.Instance.CurrentFrame <= meshs.Length - 1)
 		.Subscribe(_ => meshFilter.mesh = meshs[DracoMeshController.Instance.CurrentFrame]).AddTo(this);
 	}
+
+	private void OnDestroy() => DracoMeshController.Instance.RemoveDracoMeshToList(this);
 }
