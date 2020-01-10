@@ -6,21 +6,12 @@ using UniRx;
 using Unity.Collections;
 using UnityEngine;
 
-public class DracoMeshManager : MonoBehaviour
+public static class DracoMeshManager
 {
 	private const string _MODEL_FOLDER = "Models";
-	public static DracoMeshManager Instance => _Instance;
 
-	private static DracoMeshManager _Instance;
-
-	void Awake()
-	{
-		_Instance = GetComponent<DracoMeshManager>();
-		DontDestroyOnLoad(this);
-	}
-
-	private DracoMeshLoader _DracoLoader = new DracoMeshLoader();
-	public IObservable<Mesh[]> GetMeshListAsObservable(string _modelName)
+	private static DracoMeshLoader _DracoLoader = new DracoMeshLoader();
+	public static IObservable<Mesh[]> GetMeshListAsObservable(string _modelName)
 	{
 		return Observable.Create<Mesh[]>(_observer =>
 		{

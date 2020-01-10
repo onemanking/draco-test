@@ -26,7 +26,7 @@ public class DracoMesh : MonoBehaviour
 		m_ModelName.Subscribe(_modelName =>
 		{
 			disposable?.Dispose();
-			disposable = DracoMeshManager.Instance.GetMeshListAsObservable(_modelName)
+			disposable = DracoMeshManager.GetMeshListAsObservable(_modelName)
 				.Subscribe
 				(
 					_meshs =>
