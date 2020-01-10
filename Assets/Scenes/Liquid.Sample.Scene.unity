@@ -98,7 +98,7 @@ LightmapSettings:
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
   m_LightingDataAsset: {fileID: 0}
-  m_UseShadowmask: 0
+  m_UseShadowmask: 1
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -189,7 +189,7 @@ PrefabInstance:
     - target: {fileID: 3873985572022220597, guid: bdfe9cb58d6491f4899c995ff4733163,
         type: 3}
       propertyPath: m_LoadNextSceneOnEnd
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3873985572022220597, guid: bdfe9cb58d6491f4899c995ff4733163,
         type: 3}
@@ -360,6 +360,7 @@ GameObject:
   m_Component:
   - component: {fileID: 574577313}
   - component: {fileID: 574577312}
+  - component: {fileID: 574577314}
   m_Layer: 0
   m_Name: AR Session Origin
   m_TagString: Untagged
@@ -395,6 +396,22 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &574577314
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 574577311}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9e5861fe4d817477986290fde61dbc8c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_HumanBodyPose2DEstimationEnabled: 0
+  m_HumanBodyPose3DEstimationEnabled: 0
+  m_HumanBodyPose3DScaleEstimationEnabled: 0
+  m_HumanBodyPrefab: {fileID: 0}
 --- !u!1 &605336604
 GameObject:
   m_ObjectHideFlags: 0
@@ -409,6 +426,7 @@ GameObject:
   - component: {fileID: 605336608}
   - component: {fileID: 605336607}
   - component: {fileID: 605336606}
+  - component: {fileID: 605336611}
   m_Layer: 0
   m_Name: AR Camera
   m_TagString: Untagged
@@ -502,8 +520,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 816b289ef451e094f9ae174fb4cf8db0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_UseCustomMaterial: 0
-  m_CustomMaterial: {fileID: 0}
+  m_UseCustomMaterial: 1
+  m_CustomMaterial: {fileID: 2100000, guid: 30f99c554aceb479a894d4bdc90599a3, type: 2}
 --- !u!114 &605336608
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -544,6 +562,19 @@ Transform:
   m_Father: {fileID: 574577313}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &605336611
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 605336604}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3f78606eaaeb4410a915dc5bea1afe48, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  humanBodyManager: {fileID: 574577314}
 --- !u!1001 &1934749768
 PrefabInstance:
   m_ObjectHideFlags: 0
